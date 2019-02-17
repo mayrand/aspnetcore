@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using restful_api_building.Services;
 using restful_api_building.Models;
 using AutoMapper;
+using restful_api_building.Entities;
 
 namespace restful_api_building.Controllers
 {
@@ -30,7 +31,7 @@ namespace restful_api_building.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetAuthor")]
         public IActionResult GetAuthor(Guid id)
         {
             var authorFromRepo = _libraryRepository.GetAuthor(id);
@@ -40,22 +41,19 @@ namespace restful_api_building.Controllers
             return Ok(author);
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult CreateAuthor([FromBody] AuthorForCreationDto author)
         {
-        }
+            if (author == null)
+                return BadRequest();
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            var authorEntity = Mapper.Map<Author>(author);
+            _libraryRepository.AddAuthor(authorEntity);
+            if (!_libraryRepository.Save())
+                throw new Exception("Creating an author failed on save");
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var authorToReturn = Mapper.Map<AuthorDto>(authorEntity);
+            return CreatedAtRoute("GetAuthor", new { id = authorEntity.Id }, authorToReturn);
         }
     }
 }

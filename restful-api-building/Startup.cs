@@ -58,7 +58,7 @@ namespace restful_api_building
                     appBuilder.Run(async context =>
                     {
                         context.Response.StatusCode = 500;
-                        await context.Response.WriteAsync("Error być");
+                        await context.Response.WriteAsync("error");
                     });
                 });
                 app.UseHsts();
@@ -74,6 +74,7 @@ namespace restful_api_building
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src =>
                     src.DateOfBirth.GetCurrentAge()));
                 cfg.CreateMap<Book, Models.BookDto>();
+                cfg.CreateMap<Models.AuthorForCreationDto, Author>();
             });
             app.UseMvc();
         }
