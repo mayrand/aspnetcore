@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using restful_api_building.Services;
+using restful_api_building.Models;
+using AutoMapper;
 
 namespace restful_api_building.Controllers
 {
@@ -18,25 +20,24 @@ namespace restful_api_building.Controllers
         }
 
         [HttpGet]
-        [Route("GetAuthors")]
+        //[Route("GetAuthors")]
         public IActionResult GetAuthors()
         {
+            //throw new Exception();
             var authorsFromRepo = _libraryRepository.GetAuthors();
-            return new JsonResult(authorsFromRepo);
+            var authors = Mapper.Map<IEnumerable<AuthorDto>>(authorsFromRepo);
+            return Ok(authors);
         }
-
-        // GET api/values
-        // [HttpGet]
-        // public ActionResult<IEnumerable<string>> Get()
-        // {
-        //     return new string[] { "value1", "value2" };
-        // }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public IActionResult GetAuthor(Guid id)
         {
-            return "value";
+            var authorFromRepo = _libraryRepository.GetAuthor(id);
+            if (authorFromRepo == null)
+                return NotFound();
+            var author = Mapper.Map<AuthorDto>(authorFromRepo);
+            return Ok(author);
         }
 
         // POST api/values
