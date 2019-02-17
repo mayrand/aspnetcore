@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using restful_api_building.Services;
 using restful_api_building.Models;
 using AutoMapper;
+using restful_api_building.Entities;
 
 namespace restful_api_building.Controllers
 {
@@ -19,14 +20,49 @@ namespace restful_api_building.Controllers
             _libraryRepository = libraryRepository;
         }
 
-        [HttpGet()]
+        [HttpGet(Name = "GetBooksForAuthor")]
         public IActionResult GetBooksForAuthor(Guid authorId)
         {
-            if(!_libraryRepository.AuthorExists(authorId))
-            return NotFound();
+            if (!_libraryRepository.AuthorExists(authorId))
+                return NotFound();
             var booksForAuthorFromRepo = _libraryRepository.GetBooksForAuthor(authorId);
             var booksForAuthor = Mapper.Map<IEnumerable<BookDto>>(booksForAuthorFromRepo);
             return Ok(booksForAuthor);
+        }
+
+        [HttpGet("{id}", Name = "GetBookForAuthor")]
+        public IActionResult GetBookForAuthor(Guid authorId, Guid id)
+        {
+            if (!_libraryRepository.AuthorExists(authorId))
+                return NotFound();
+            var bookForAuthorFromRepo = _libraryRepository.GetBookForAuthor(authorId, id);
+            if (bookForAuthorFromRepo == null) return NotFound();
+            var bookForAuthor = Mapper.Map<BookDto>(bookForAuthorFromRepo);
+            return Ok(bookForAuthor);
+        }
+
+        [HttpPost]
+        public IActionResult CreateBookForAuthor(Guid authorId, [FromBody] BookForCreationDto book)
+        {
+            if (book == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_libraryRepository.AuthorExists(authorId))
+            {
+                return NotFound();
+            }
+
+            var bookEntity = Mapper.Map<Book>(book);
+            _libraryRepository.AddBookForAuthor(authorId, bookEntity);
+            if (!_libraryRepository.Save())
+            {
+                throw new Exception($"Creating a book for author {authorId} failed on save.");
+            }
+
+            var bookToReturn = Mapper.Map<BookDto>(bookEntity);
+            return CreatedAtRoute("GetBookForAuthor", new { authorId = authorId, id = bookToReturn.id }, bookToReturn);
         }
     }
 }

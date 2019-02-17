@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using restful_api_building.Helpers;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using restful_api_building.Models;
 
 namespace restful_api_building
 {
@@ -68,13 +69,14 @@ namespace restful_api_building
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<Entities.Author, Models.AuthorDto>()
+                cfg.CreateMap<Author, AuthorDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
                     $"{src.FirstName} {src.LastName}"))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src =>
                     src.DateOfBirth.GetCurrentAge()));
-                cfg.CreateMap<Book, Models.BookDto>();
-                cfg.CreateMap<Models.AuthorForCreationDto, Author>();
+                cfg.CreateMap<Book, BookDto>();
+                cfg.CreateMap<AuthorForCreationDto, Author>();
+                cfg.CreateMap<BookForCreationDto, Book>();
             });
             app.UseMvc();
         }
