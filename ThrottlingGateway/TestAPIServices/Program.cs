@@ -1,9 +1,9 @@
-﻿namespace APIServices
-{
-    using Microsoft.AspNetCore;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
+namespace TestAPIServices
+{
     public class Program
     {
         public static void Main(string[] args)
@@ -12,10 +12,10 @@
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)                   
+            WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .ConfigureAppConfiguration((hostingContext, config) => { config.AddJsonFile("appsettings.json", false, true); })
-                .UseUrls("http://localhost:808")
+                .UseUrls(args.Length < 1 ? "http://localhost:808" : args[0]) // for use with dotnet run only
                 .Build();
     }
 }

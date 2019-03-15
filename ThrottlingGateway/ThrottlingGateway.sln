@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThrottlingGateway", "ThrottlingGateway\ThrottlingGateway.csproj", "{976B3C00-F296-48B9-96FD-AE973DF68444}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAPIServices", "TestAPIServices\TestAPIServices.csproj", "{727EB8BB-8A8F-4224-9BDE-0A7D1BCBDE9A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{976B3C00-F296-48B9-96FD-AE973DF68444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{976B3C00-F296-48B9-96FD-AE973DF68444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{976B3C00-F296-48B9-96FD-AE973DF68444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{976B3C00-F296-48B9-96FD-AE973DF68444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{727EB8BB-8A8F-4224-9BDE-0A7D1BCBDE9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{727EB8BB-8A8F-4224-9BDE-0A7D1BCBDE9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{727EB8BB-8A8F-4224-9BDE-0A7D1BCBDE9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{727EB8BB-8A8F-4224-9BDE-0A7D1BCBDE9A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {955CC1AF-C9F1-4B8E-BD85-FE10753084B8}
+	EndGlobalSection
+EndGlobal

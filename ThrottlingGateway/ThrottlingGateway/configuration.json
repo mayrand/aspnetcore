@@ -1,12 +1,12 @@
 ﻿{
   "ReRoutes": [
     {
-      "DownstreamPathTemplate": "/api/{url}",
+      "DownstreamPathTemplate": "/{url}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 808
+          "Port": 62146
         }
       ],
       "UpstreamPathTemplate": "/{url}",

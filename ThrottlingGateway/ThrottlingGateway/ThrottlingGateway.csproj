@@ -5,18 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
-    <PackageReference Include="Ocelot" Version="7.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.9" />
+    <PackageReference Include="Ocelot" Version="12.0.1" />
   </ItemGroup>
-
-
   <ItemGroup>
     <None Remove="configuration.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="configuration.json" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="configuration.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -25,6 +24,9 @@
   <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 </Project>
