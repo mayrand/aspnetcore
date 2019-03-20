@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace TestAPIServices.Controllers
+namespace LoadInfoAdapterStub.Controllers
 {
     [Produces("application/xml")]
     [Route("api/LoadInfo")]

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ThrottlingGateway.Models
 {
@@ -9,17 +6,9 @@ namespace ThrottlingGateway.Models
     {
         public string ThrottlingInfoUrl { get; set; }
         public int FunctionLevelCheckInterval { get; set; }
-        public List<Method> Methods { get; set; }
+        public List<Method> Methods { get; set; } = new List<Method>();
         public int IdleCacheTime { get; set; }
         public int BusyCacheTime { get; set; }
-    }
-
-    public class Method
-    {
-        public string Name { get; set; }
-        public int LowThrottleTime { get; set; }
-        public int HighThrottleTime { get; set; }
-        public bool Enabled { get; set; }
-        public string Level { get; set; }
+        public bool LogRequestResponse { get; set; }
     }
 }

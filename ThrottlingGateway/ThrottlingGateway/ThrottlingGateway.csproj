@@ -7,19 +7,8 @@
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.9" />
-    <PackageReference Include="Ocelot" Version="12.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="configuration.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="configuration.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="configuration.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.10" />
+    <PackageReference Include="Ocelot" Version="13.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">

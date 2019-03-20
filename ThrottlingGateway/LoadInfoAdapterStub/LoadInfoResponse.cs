@@ -1,4 +1,4 @@
-﻿namespace TestAPIServices
+﻿namespace LoadInfoAdapterStub
 {
     public class LoadInfoResponse
     {
