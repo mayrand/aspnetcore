@@ -41,8 +41,7 @@ namespace ThrottlingGateway.Middleware
 
         private (Stream, string) Preproccess(HttpContext context, MemoryStream response, MemoryStream request)
         {
-            string originalRequestBody;
-            originalRequestBody = new StreamReader(context.Request.Body).ReadToEnd();
+            var originalRequestBody = new StreamReader(context.Request.Body).ReadToEnd();
             var bytesToWrite = Encoding.UTF8.GetBytes(originalRequestBody);
             request.Write(bytesToWrite, 0, bytesToWrite.Length);
             request.Seek(0, SeekOrigin.Begin);

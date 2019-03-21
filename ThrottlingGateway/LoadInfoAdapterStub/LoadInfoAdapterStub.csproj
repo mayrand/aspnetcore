@@ -7,5 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" />
   </ItemGroup>
-
+<PropertyGroup>
+  <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+</PropertyGroup>
 </Project>

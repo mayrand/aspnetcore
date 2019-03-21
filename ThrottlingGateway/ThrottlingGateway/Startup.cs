@@ -24,16 +24,12 @@ namespace ThrottlingGateway
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(env.ContentRootPath)
-                .AddEnvironmentVariables()
-                .AddJsonFile("appsettings.json", false, true);
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
