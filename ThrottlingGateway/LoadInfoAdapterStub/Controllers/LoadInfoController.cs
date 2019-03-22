@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LoadInfoAdapterStub.Controllers
 {
@@ -21,6 +23,14 @@ namespace LoadInfoAdapterStub.Controllers
         {
             _response = loadInfoResponse;
             return Ok(_response);
+        }
+
+        [Route("LoadInfos")]
+        [HttpGet]
+        public IActionResult LoadInfos(int from, int to)
+        {
+            var count = to > 0 ? new Random().Next(from, to) : from;
+            return Ok(Enumerable.Repeat(_response, count).ToList());
         }
     }
 }
