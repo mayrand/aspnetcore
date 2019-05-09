@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using log4net;
+using log4net.Appender;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using ThrottlingGateway.Models;
 
 namespace ThrottlingGateway.Middleware
@@ -15,10 +17,11 @@ namespace ThrottlingGateway.Middleware
     public class HttpLoggingMiddleware
     {
         private readonly RequestDelegate _next;
-
+        private readonly string _logFile;
         public HttpLoggingMiddleware(RequestDelegate next)
         {
             _next = next;
+            _logFile = GetLogFileName("LogFileAppender");
         }
 
         public async Task InvokeAsync(HttpContext context, ILogger<HttpLoggingMiddleware> logger, IOptionsMonitor<ThrottlingOptions> options)
@@ -29,17 +32,17 @@ namespace ThrottlingGateway.Middleware
             }
             else
             {
-                using (var request = new MemoryStream())
-                using (var response = new MemoryStream())
+                using (var request = new LinkedBuffer())
+                using (var response = new LinkedBuffer())
                 {
-                    (Stream originalResponseBody, string originalRequestBody) = Preproccess(context, response, request);
+                    (Stream originalResponseBody, string originalRequestBody) = Preprocess(context, response, request);
                     await _next(context);
-                    await Postproccess(context, response, originalRequestBody, logger, originalResponseBody);
+                    await Postprocess(context, response, originalRequestBody, logger, originalResponseBody);
                 }
             }
         }
 
-        private (Stream, string) Preproccess(HttpContext context, MemoryStream response, MemoryStream request)
+        private (Stream, string) Preprocess(HttpContext context, LinkedBuffer response, LinkedBuffer request)
         {
             var originalRequestBody = new StreamReader(context.Request.Body).ReadToEnd();
             var bytesToWrite = Encoding.UTF8.GetBytes(originalRequestBody);
@@ -51,7 +54,7 @@ namespace ThrottlingGateway.Middleware
             return (originalResponseBody, originalRequestBody);
         }
 
-        private async Task Postproccess(HttpContext context, MemoryStream response, string originalRequestBody, ILogger<HttpLoggingMiddleware> logger, Stream originalResponseBody)
+        private async Task Postprocess(HttpContext context, LinkedBuffer response, string originalRequestBody, ILogger<HttpLoggingMiddleware> logger, Stream originalResponseBody)
         {
             response.Seek(0, SeekOrigin.Begin);
 
@@ -63,11 +66,26 @@ namespace ThrottlingGateway.Middleware
 
             logger.LogInformation(
                 $"Response.Headers:{Environment.NewLine}{GetHeaders(context.Response.Headers)}");
-            logger.LogInformation($"Response.Body: {new StreamReader(response).ReadToEnd()}");
-            response.Seek(0, SeekOrigin.Begin);
+            logger.LogInformation($"Response.Body: ");
+            await LogResponseBody(_logFile, response, originalResponseBody, context);
+        }
 
-            await response.CopyToAsync(originalResponseBody);
-            context.Response.Body = originalResponseBody;
+        private static async Task LogResponseBody(string _logFile, LinkedBuffer response, Stream originalResponseBody, HttpContext context)
+        {
+            using (var sw = new StreamWriter(_logFile, true))
+            using (var sr = new StreamReader(response))
+            {
+                while (sr.Peek() >= 0)
+                {
+                    var buffer = new char[Math.Min(response.Length, 1048576)];
+                    sr.Read(buffer, 0, buffer.Length);
+                    sw.Write(buffer);
+                }
+                sw.WriteLine();
+                response.Seek(0, SeekOrigin.Begin);
+                await response.CopyToAsync(originalResponseBody);
+                context.Response.Body = originalResponseBody;
+            }
         }
 
         private string GetHeaders(IHeaderDictionary headers)
@@ -78,6 +96,15 @@ namespace ThrottlingGateway.Middleware
                 result.AppendLine($"{header.Key}: {header.Value}");
             }
             return result.ToString();
+        }
+        public static string GetLogFileName(string name)
+        {
+            var rootAppender = LogManager.GetRepository(Assembly.GetExecutingAssembly())
+                .GetAppenders()
+                .OfType<FileAppender>()
+                .FirstOrDefault(fa => fa.Name == name);
+
+            return rootAppender != null ? rootAppender.File : string.Empty;
         }
     }
 }

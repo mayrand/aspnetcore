@@ -1,7 +1,4 @@
-﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -11,12 +8,6 @@ using Ocelot.Middleware;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 using ThrottlingGateway.Middleware;
 using ThrottlingGateway.Models;
 
@@ -43,6 +34,7 @@ namespace ThrottlingGateway
             loggerFactory.AddLog4Net();
             logger.LogDebug($"Hosting process model: {Process.GetCurrentProcess().ProcessName}");
             logger.LogDebug($"Current dir: {Directory.GetCurrentDirectory()}");
+            logger.LogDebug($"Is64BitProcess: " + Environment.Is64BitProcess);
             app.UseThrottlingMiddleware();
             app.UseHttpLoggingMiddleware();
             app.UseOcelot().Wait();

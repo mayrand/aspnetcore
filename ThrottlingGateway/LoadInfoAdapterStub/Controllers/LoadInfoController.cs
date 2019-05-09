@@ -25,6 +25,22 @@ namespace LoadInfoAdapterStub.Controllers
             return Ok(_response);
         }
 
+        [Route("LoadInfo")]
+        [HttpPut]
+        public IActionResult PutInfo([FromBody]LoadInfoResponse loadInfoResponse)
+        {
+            _response = loadInfoResponse;
+            return Ok(_response);
+        }
+
+        [Route("LoadInfo")]
+        [HttpDelete]
+        public IActionResult DeleteInfo()
+        {
+            _response = new LoadInfoResponse();
+            return Ok(_response);
+        }
+
         [Route("LoadInfos")]
         [HttpGet]
         public IActionResult LoadInfos(int from, int to)
